@@ -1,11 +1,11 @@
-import { Bike, Car, Bike as Bicycle } from 'lucide-react';
+import { Bike, Car, Truck as UtvIcon } from 'lucide-react';
 
 const CategoryFilter = ({ selectedCategory, onCategoryChange }) => {
  const categories = [
   { id: 'all',  name: 'Todos',    icon: null  },
   { id: 'moto', name: 'Motos',    icon: Bike  },
-  { id: 'utv',  name: 'UTV',      icon: Car   },
-  { id: 'atv',  name: 'ATV',      icon: Bicycle }
+  { id: 'utv',  name: 'UTV',      icon: UtvIcon  },
+  { id: 'atv',  name: 'ATV',      icon: Car }
 ];
 
   return (
