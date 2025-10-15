@@ -196,7 +196,7 @@ const Contact = () => {
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full px-4 py-3 bg-yamaha-dark-700/50 border border-yamaha-blue-900/30 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-yamaha-accent focus:border-transparent transition-all backdrop-blur-sm"
-                    placeholder="+1 (555) 123-4567"
+                    placeholder="+54 (3451) 123-4567"
                   />
                 </div>
 

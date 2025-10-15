@@ -135,27 +135,12 @@ const Navbar = () => {
                   </motion.button>
                 </div>
               ) : (
-                <motion.div
-                  className="ml-4"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.4 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Link 
-                    to="/login" 
-                    className="group relative bg-gradient-accent text-black px-6 py-2.5 rounded-xl font-bold overflow-hidden shadow-lg"
-                  >
-                    <span className="relative z-10">Iniciar Sesión</span>
-                    <motion.div
-                      className="absolute inset-0 bg-yamaha-accent-light"
-                      initial={{ x: '-100%' }}
-                      whileHover={{ x: 0 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </Link>
-                </motion.div>
+               <Link
+  to="/login"
+  className="bg-gradient-accent text-black px-6 py-2.5 rounded-xl font-bold shadow-lg hover:bg-yamaha-accent-light transition-colors"
+>
+  Iniciar Sesión
+</Link>
               )}
             </div>
 

@@ -223,7 +223,7 @@ const Home = () => {
       </div>
 
       {/* Category Filter */}
-      <div className="bg-yamaha-dark-900 border-b border-yamaha-blue-900/30 sticky top-16 z-10 backdrop-blur-lg bg-opacity-95">
+      <div className="bg-yamaha-dark-900 border-b border-yamaha-blue-900/30 top-16 z-10 backdrop-blur-lg bg-opacity-95">
         <CategoryFilter 
           selectedCategory={selectedCategory} 
           onCategoryChange={setSelectedCategory} 

@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
           alt={product.nombre}
           className="w-full h-48 object-cover"
           onError={(e) => {
-            e.target.src = 'https://via.placeholder.com/400x300?text=Yamaha';
+            e.target.src = 'https://via.placeholder.com/400x300?text=Yamaha/';
           }}
         />
       </div>
