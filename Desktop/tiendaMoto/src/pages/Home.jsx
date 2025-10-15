@@ -4,6 +4,7 @@ import { db } from '../firebase/config';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
 import { motion } from 'framer-motion';
+import { ChevronDown, Award, Users, Clock, Headphones } from 'lucide-react';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -38,115 +39,191 @@ const Home = () => {
     }
   };
 
+  const scrollToProducts = () => {
+    document.getElementById('products-section').scrollIntoView({ 
+      behavior: 'smooth' 
+    });
+  };
+
   return (
-    <div className="pt-16 bg-gray-50">
-      {/* Hero Banner con Fondo Negro */}
-      <div className="relative h-[500px] bg-black overflow-hidden">
-        {/* Logo y Texto YAMAHA de Fondo */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-20">
-          <div className="flex items-center gap-12">
-            <img 
-              src="/yamaha-logo-white.png" 
-              alt="Yamaha Background" 
-              className="h-72 w-auto"
-            />
-            <span className="text-[220px] font-black text-white tracking-wider font-yamaha">
-              YAMAHA
-            </span>
-          </div>
+    <div className="pt-16 bg-yamaha-dark-900">
+      {/* Hero Banner Premium */}
+      <div className="relative h-[500px] sm:h-[600px] md:h-[700px] bg-gradient-to-br from-black via-yamaha-dark-900 to-yamaha-blue-900 overflow-hidden">
+        {/* Animated Background Grid */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `linear-gradient(rgba(13, 71, 161, 0.3) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(13, 71, 161, 0.3) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }}></div>
         </div>
+
+        {/* Logo YAMAHA de Fondo con Animación */}
+        <motion.div 
+          className="absolute inset-0 flex items-center justify-center opacity-5"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.05 }}
+          transition={{ duration: 2, ease: "easeOut" }}
+        >
+          <span className="text-[100px] sm:text-[150px] md:text-[200px] lg:text-[280px] font-black text-white tracking-widest font-yamaha">
+            YAMAHA
+          </span>
+        </motion.div>
+  
+
+        {/* Elementos decorativos con glow */}
+        <motion.div 
+          className="absolute top-0 right-0 w-96 h-96 bg-yamaha-blue-500/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.3, 0.2],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        ></motion.div>
+        <motion.div 
+          className="absolute bottom-0 left-0 w-96 h-96 bg-yamaha-accent/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.3, 0.2],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        ></motion.div>
         
-        {/* Elementos decorativos */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-yamaha-blue-400/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-yamaha-accent/10 rounded-full blur-3xl"></div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center z-10">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 h-full flex items-center z-10">
           <motion.div 
-            className="text-white max-w-2xl"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+            className="text-white w-full max-w-3xl"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
           >
+            {/* Badge Superior */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
+              className="inline-flex items-center gap-2 bg-yamaha-blue-500/20 backdrop-blur-sm border border-yamaha-blue-400/30 rounded-full px-4 py-2 mb-6"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
             >
-              <h1 className="text-6xl font-bold mb-4 leading-tight drop-shadow-lg">
-                Descubre la Pasión 
-                <span className="block text-yamaha-accent">de Conducir</span>
+              <Award className="w-4 h-4 text-yamaha-accent" />
+              <span className="text-sm font-medium text-yamaha-blue-100">
+                Concesionario Oficial Yamaha
+              </span>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 sm:mb-6 leading-tight">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-yamaha-blue-200 to-white">
+                  Experimenta la
+                </span>
+                <br />
+                <span className="text-yamaha-accent drop-shadow-[0_0_30px_rgba(255,193,7,0.5)]">
+                  Excelencia en Movimiento
+                </span>
               </h1>
             </motion.div>
             
             <motion.p 
-              className="text-xl mb-8 text-gray-200 leading-relaxed drop-shadow-md"
-              initial={{ opacity: 0, y: 20 }}
+              className="text-base sm:text-lg md:text-xl lg:text-2xl mb-8 sm:mb-10 text-gray-300 leading-relaxed max-w-2xl font-light"
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
             >
-              Explora nuestra gama completa de vehículos Yamaha. Calidad, rendimiento y tecnología en cada modelo.
+              Descubre vehículos que combinan{' '}
+              <span className="text-yamaha-accent font-semibold">ingeniería japonesa</span>,{' '}
+              tecnología de vanguardia y diseño excepcional.
             </motion.p>
             
             <motion.div 
-              className="flex gap-4"
-              initial={{ opacity: 0, y: 20 }}
+              className="flex flex-col sm:flex-row gap-4"
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
             >
-              <button className="bg-yamaha-accent text-yamaha-dark-900 px-8 py-4 rounded-lg font-bold hover:bg-yamaha-accent-light transition-all duration-300 shadow-xl hover:shadow-glow-accent transform hover:-translate-y-1">
-                Ver Modelos
-              </button>
-              <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold hover:bg-white hover:text-black transition-all duration-300">
-                Contactar
-              </button>
+              <motion.button 
+                onClick={scrollToProducts}
+                className="group relative bg-gradient-accent text-black px-8 py-4 rounded-xl font-bold overflow-hidden shadow-2xl"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  Explorar Vehículos
+                  <ChevronDown className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
+                </span>
+                <motion.div
+                  className="absolute inset-0 bg-yamaha-accent-light"
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.button>
+              
+              <motion.button 
+                className="group bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 hover:border-white/50 transition-all duration-300 shadow-xl"
+                whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(255,255,255,0.3)" }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Agendar Test Drive
+              </motion.button>
             </motion.div>
           </motion.div>
         </div>
-
-        {/* Indicador de scroll */}
-        <motion.div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        >
-          <div className="w-6 h-10 border-2 border-white rounded-full flex items-start justify-center p-2">
-            <div className="w-1 h-3 bg-white rounded-full"></div>
-          </div>
-        </motion.div>
       </div>
 
-      {/* Stats Bar */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      {/* Stats Bar Premium */}
+      <div className="bg-gradient-to-r from-yamaha-dark-800 via-yamaha-dark-900 to-yamaha-dark-800 border-y border-yamaha-blue-900/30">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {[
-              { number: '50+', label: 'Modelos Disponibles' },
-              { number: '1000+', label: 'Clientes Satisfechos' },
-              { number: '15', label: 'Años de Experiencia' },
-              { number: '24/7', label: 'Soporte Técnico' }
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                className="text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <div className="text-4xl font-bold text-yamaha-blue-600 mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-sm text-gray-600 font-medium">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
+              { icon: Award, number: '50+', label: 'Modelos Disponibles', color: 'text-yamaha-accent' },
+              { icon: Users, number: '1000+', label: 'Clientes Satisfechos', color: 'text-yamaha-blue-400' },
+              { icon: Clock, number: '15', label: 'Años de Experiencia', color: 'text-yamaha-accent' },
+              { icon: Headphones, number: '24/7', label: 'Soporte Técnico', color: 'text-yamaha-blue-400' }
+            ].map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <motion.div
+                  key={index}
+                  className="text-center group"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  whileHover={{ y: -5 }}
+                >
+                  <motion.div
+                    className={`inline-block p-3 rounded-xl bg-yamaha-dark-700/50 backdrop-blur-sm mb-3 ${stat.color}`}
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <Icon className="w-6 h-6" />
+                  </motion.div>
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 group-hover:text-yamaha-accent transition-colors">
+                    {stat.number}
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-400 font-medium">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>
 
       {/* Category Filter */}
-      <div className="bg-white border-b border-gray-200 sticky top-16 z-10 shadow-sm">
+      <div className="bg-yamaha-dark-900 border-b border-yamaha-blue-900/30 sticky top-16 z-10 backdrop-blur-lg bg-opacity-95">
         <CategoryFilter 
           selectedCategory={selectedCategory} 
           onCategoryChange={setSelectedCategory} 
@@ -154,37 +231,54 @@ const Home = () => {
       </div>
 
       {/* Products Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div id="products-section" className="max-w-7xl mx-auto px-4 py-16 sm:py-20">
         {/* Header de sección */}
-        <div className="mb-12">
-          <motion.h2 
-            className="text-4xl font-bold text-yamaha-dark-500 mb-3"
-            initial={{ opacity: 0, y: 20 }}
+        <div className="mb-16 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="inline-block"
           >
-            {selectedCategory === 'all' ? 'Todos los Vehículos' : 
-             selectedCategory === 'moto' ? 'Motocicletas' :
-             selectedCategory === 'utv' ? 'Vehículos Utilitarios' : 'Todo Terreno'}
-          </motion.h2>
-          <motion.div 
-            className="w-24 h-1 bg-yamaha-accent rounded-full"
-            initial={{ width: 0 }}
-            whileInView={{ width: 96 }}
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">
+              {selectedCategory === 'all' ? 'Colección Completa' : 
+               selectedCategory === 'moto' ? 'Motocicletas Premium' :
+               selectedCategory === 'utv' ? 'Vehículos Utilitarios' : 'Todo Terreno'}
+            </h2>
+            <motion.div 
+              className="h-1.5 bg-gradient-accent rounded-full mx-auto"
+              initial={{ width: 0 }}
+              whileInView={{ width: 120 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            ></motion.div>
+          </motion.div>
+          <motion.p
+            className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-          ></motion.div>
+            transition={{ delay: 0.5 }}
+          >
+            Cada vehículo es una obra maestra de ingeniería
+          </motion.p>
         </div>
 
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-gray-200 h-64 rounded-xl mb-4"></div>
-                <div className="h-6 bg-gray-200 rounded w-3/4 mb-3"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-              </div>
+              <motion.div 
+                key={i} 
+                className="animate-pulse"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <div className="bg-yamaha-dark-800 h-72 rounded-2xl mb-4"></div>
+                <div className="h-6 bg-yamaha-dark-800 rounded w-3/4 mb-3"></div>
+                <div className="h-4 bg-yamaha-dark-800 rounded w-1/2 mb-2"></div>
+                <div className="h-4 bg-yamaha-dark-800 rounded w-2/3"></div>
+              </motion.div>
             ))}
           </div>
         ) : (
@@ -197,14 +291,14 @@ const Home = () => {
             {filteredProducts.map((product, index) => (
               <motion.div
                 key={product.id}
-                initial={{ y: 30, opacity: 0 }}
+                initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ 
-                  duration: 0.4,
+                  duration: 0.5,
                   delay: index * 0.1,
                   ease: "easeOut"
                 }}
-                whileHover={{ y: -5 }}
+                whileHover={{ y: -10, transition: { duration: 0.2 } }}
               >
                 <ProductCard product={product} />
               </motion.div>
@@ -214,43 +308,101 @@ const Home = () => {
 
         {!loading && filteredProducts.length === 0 && (
           <motion.div 
-            className="text-center py-16 bg-white rounded-xl shadow-sm"
+            className="text-center py-20 bg-yamaha-dark-800 rounded-2xl border border-yamaha-blue-900/30"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
           >
-            <div className="text-6xl mb-4">🏍️</div>
-            <p className="text-gray-500 text-lg font-medium mb-2">
+            <motion.div 
+              className="text-7xl mb-6"
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            >
+              🏍️
+            </motion.div>
+            <p className="text-gray-400 text-xl font-semibold mb-2">
               No hay vehículos disponibles
             </p>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-500 text-sm">
               en la categoría {selectedCategory}
             </p>
           </motion.div>
         )}
       </div>
 
-      {/* CTA Section */}
-      <div className="bg-yamaha-dark-500 text-white py-20 mt-16">
-        <div className="max-w-7xl mx-auto px-4 text-center">
+      {/* CTA Section Premium */}
+      <div className="relative bg-gradient-yamaha-dark py-20 sm:py-24 md:py-32 mt-20 overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,193,7,0.15) 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
+
+        <motion.div
+          className="absolute top-0 right-0 w-96 h-96 bg-yamaha-accent/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            x: [0, 50, 0],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+
+        <div className="relative max-w-7xl mx-auto px-4 text-center z-10">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl font-bold mb-4">
-              ¿Listo para tu próxima aventura?
+            <motion.div
+              className="inline-block mb-6"
+              animate={{ y: [0, -10, 0] }}
+              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+            >
+              <Award className="w-16 h-16 text-yamaha-accent mx-auto" />
+            </motion.div>
+
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">
+              ¿Listo para tu{' '}
+              <span className="bg-clip-text text-transparent bg-gradient-accent">
+                Próxima Aventura
+              </span>
+              ?
             </h2>
-            <p className="text-yamaha-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-              Visítanos en nuestro showroom o agenda una prueba de manejo. Nuestro equipo está listo para ayudarte.
+            
+            <p className="text-gray-300 text-base sm:text-lg md:text-xl mb-10 max-w-3xl mx-auto px-4 leading-relaxed">
+              Visita nuestro showroom exclusivo y experimenta la{' '}
+              <span className="text-yamaha-accent font-semibold">excelencia Yamaha</span>.
+              Nuestro equipo de expertos está listo para asesorarte.
             </p>
-            <div className="flex gap-4 justify-center">
-              <button className="bg-yamaha-accent text-yamaha-dark-900 px-8 py-4 rounded-lg font-bold hover:bg-yamaha-accent-light transition-all duration-300 shadow-lg">
-                Agendar Test Drive
-              </button>
-              <button className="bg-transparent border-2 border-yamaha-accent text-yamaha-accent px-8 py-4 rounded-lg font-bold hover:bg-yamaha-accent hover:text-yamaha-dark-900 transition-all duration-300">
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
+              <motion.button 
+                className="group relative bg-gradient-accent text-black px-10 py-5 rounded-xl font-bold text-lg overflow-hidden shadow-2xl"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span className="relative z-10">Agendar Test Drive</span>
+                <motion.div
+                  className="absolute inset-0 bg-yamaha-accent-light"
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.button>
+              
+              <motion.button 
+                className="bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-white/20 hover:border-yamaha-accent transition-all duration-300 shadow-xl"
+                whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(255,193,7,0.4)" }}
+                whileTap={{ scale: 0.95 }}
+              >
                 Ver Financiamiento
-              </button>
+              </motion.button>
             </div>
           </motion.div>
         </div>

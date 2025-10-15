@@ -8,9 +8,9 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="col-span-1 md:col-span-2">
             <img 
-              src="/yamaha-logo-white.png" 
+              src="/public/logoYamahaBlanco2.png" 
               alt="Yamaha" 
-              className="h-12 mb-4"
+              className="h-20 mb-4"
             />
             <p className="text-yamaha-dark-200 mb-4">
               Yamaha Motor Corporation - Líder en innovación y tecnología 
