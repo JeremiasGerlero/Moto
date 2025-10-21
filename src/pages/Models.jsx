@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase/config';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
 import { motion } from 'framer-motion';
 import { Bike, Truck, Award, Calendar, Sparkles, Grid3x3, List, ChevronRight } from 'lucide-react';
+
+const API_URL = 'http://localhost:5000/api/products';
 
 const Models = () => {
   const [products, setProducts] = useState([]);
@@ -26,15 +26,12 @@ const Models = () => {
 
   const fetchProducts = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'vehiculos'));
-      const productsData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setProducts(productsData);
-      setLoading(false);
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      setProducts(data);
     } catch (error) {
       console.error('Error fetching products:', error);
+    } finally {
       setLoading(false);
     }
   };
@@ -270,7 +267,7 @@ const Models = () => {
           >
             {filteredProducts.map((product, index) => (
               <motion.div
-                key={product.id}
+                key={product._id} /* ← cambiado a _id para MongoDB */
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ 

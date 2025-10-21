@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase/config';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
 import { motion } from 'framer-motion';
 import { ChevronDown, Award, Users, Clock, Headphones } from 'lucide-react';
+
+const API_URL = 'http://localhost:5000/api/products';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -26,23 +26,18 @@ const Home = () => {
 
   const fetchProducts = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'vehiculos'));
-      const productsData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setProducts(productsData);
-      setLoading(false);
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      setProducts(data);
     } catch (error) {
       console.error('Error fetching products:', error);
+    } finally {
       setLoading(false);
     }
   };
 
   const scrollToProducts = () => {
-    document.getElementById('products-section').scrollIntoView({ 
-      behavior: 'smooth' 
-    });
+    document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -69,7 +64,6 @@ const Home = () => {
             YAMAHA
           </span>
         </motion.div>
-  
 
         {/* Elementos decorativos con glow */}
         <motion.div 
@@ -185,7 +179,7 @@ const Home = () => {
       <div className="bg-gradient-to-r from-yamaha-dark-800 via-yamaha-dark-900 to-yamaha-dark-800 border-y border-yamaha-blue-900/30">
         <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-            {[
+            [
               { icon: Award, number: '50+', label: 'Modelos Disponibles', color: 'text-yamaha-accent' },
               { icon: Users, number: '1000+', label: 'Clientes Satisfechos', color: 'text-yamaha-blue-400' },
               { icon: Clock, number: '15', label: 'Años de Experiencia', color: 'text-yamaha-accent' },
@@ -290,7 +284,7 @@ const Home = () => {
           >
             {filteredProducts.map((product, index) => (
               <motion.div
-                key={product.id}
+                key={product._id} /* ← cambiado a _id para MongoDB */
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ 

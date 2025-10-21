@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../firebase/config';
 import VehicleTable from '../components/Admin/VehicleTable';
 import VehicleForm from '../components/Admin/VehicleForm';
 import { Plus } from 'lucide-react';
+
+const API_URL = 'http://localhost:5000/api/products'; // ← tu backend MongoDB
 
 const Admin = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -18,36 +17,30 @@ const Admin = () => {
 
   const fetchVehicles = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'vehiculos'));
-      const vehiclesData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setVehicles(vehiclesData);
-      setLoading(false);
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      setVehicles(data);
     } catch (error) {
       console.error('Error fetching vehicles:', error);
+    } finally {
       setLoading(false);
     }
   };
 
   const handleAddVehicle = async (vehicleData, imageFile) => {
     try {
-      let imageUrl = '';
-      
-      if (imageFile) {
-        const imageRef = ref(storage, `vehicles/${Date.now()}_${imageFile.name}`);
-        await uploadBytes(imageRef, imageFile);
-        imageUrl = await getDownloadURL(imageRef);
-      }
+      const formData = new FormData();
+      formData.append('name', vehicleData.name);
+      formData.append('price', Number(vehicleData.precio));
+      formData.append('category', vehicleData.categoria);
+      formData.append('description', vehicleData.descripcion);
+      if (imageFile) formData.append('image', imageFile);
 
-      const newVehicle = {
-        ...vehicleData,
-        imageUrl: imageUrl || vehicleData.imageUrl,
-        precio: Number(vehicleData.precio)
-      };
+      await fetch(API_URL, {
+        method: 'POST',
+        body: formData,
+      });
 
-      await addDoc(collection(db, 'vehiculos'), newVehicle);
       await fetchVehicles();
       setShowForm(false);
     } catch (error) {
@@ -57,21 +50,18 @@ const Admin = () => {
 
   const handleEditVehicle = async (vehicleData, imageFile) => {
     try {
-      let imageUrl = vehicleData.imageUrl;
-      
-      if (imageFile) {
-        const imageRef = ref(storage, `vehicles/${Date.now()}_${imageFile.name}`);
-        await uploadBytes(imageRef, imageFile);
-        imageUrl = await getDownloadURL(imageRef);
-      }
+      const formData = new FormData();
+      formData.append('name', vehicleData.name);
+      formData.append('price', Number(vehicleData.precio));
+      formData.append('category', vehicleData.categoria);
+      formData.append('description', vehicleData.descripcion);
+      if (imageFile) formData.append('image', imageFile);
 
-      const updatedVehicle = {
-        ...vehicleData,
-        imageUrl: imageUrl,
-        precio: Number(vehicleData.precio)
-      };
+      await fetch(`${API_URL}/${editingVehicle._id}`, {
+        method: 'PUT',
+        body: formData,
+      });
 
-      await updateDoc(doc(db, 'vehiculos', editingVehicle.id), updatedVehicle);
       await fetchVehicles();
       setEditingVehicle(null);
       setShowForm(false);
@@ -81,13 +71,12 @@ const Admin = () => {
   };
 
   const handleDeleteVehicle = async (vehicleId) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar este vehículo?')) {
-      try {
-        await deleteDoc(doc(db, 'vehiculos', vehicleId));
-        await fetchVehicles();
-      } catch (error) {
-        console.error('Error deleting vehicle:', error);
-      }
+    if (!window.confirm('¿Estás seguro de que quieres eliminar este vehículo?')) return;
+    try {
+      await fetch(`${API_URL}/${vehicleId}`, { method: 'DELETE' });
+      await fetchVehicles();
+    } catch (error) {
+      console.error('Error deleting vehicle:', error);
     }
   };
 
