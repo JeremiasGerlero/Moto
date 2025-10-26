@@ -5,11 +5,11 @@ const ProductCard = ({ product }) => {
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
       <div className="aspect-w-16 aspect-h-9 bg-gray-200">
         <img 
-          src={product.imageUrl} 
+          src={product.imagen}  
           alt={product.nombre}
-          className="w-full h-48 object-cover"
+          className="w-full h-auto object-cover"
           onError={(e) => {
-            e.target.src = 'https://via.placeholder.com/400x300?text=Yamaha/';
+            e.target.src = 'https://res.cloudinary.com/dbqapcw0r/image/upload/w_800,q_auto,f_auto/moto.jpg';
           }}
         />
       </div>

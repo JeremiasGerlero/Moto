@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -29,7 +29,7 @@ const Navbar = () => {
   return (
     <>
       {/* Navbar con backdrop blur y gradiente */}
-      <motion.nav 
+      <motion.nav
         className="fixed w-full top-0 z-50 bg-yamaha-dark-900/95 backdrop-blur-lg border-b border-yamaha-blue-900/30"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -37,21 +37,21 @@ const Navbar = () => {
       >
         {/* Glow superior */}
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-yamaha-accent to-transparent"></div>
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20">
             {/* Logo */}
-            <motion.div 
+            <motion.div
               className="flex items-center"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
             >
               <Link to="/" className="flex items-center py-2 group">
-                <motion.img 
-                  src="/logoYamahaBlanco2.png" 
-                  alt="Yamaha" 
+                <motion.img
+                  src="/logoYamahaBlanco2.png"
+                  alt="Yamaha"
                   className="h-16 w-auto transition-all duration-300"
-                  whileHover={{ 
+                  whileHover={{
                     filter: "drop-shadow(0 0 12px rgba(255,193,7,0.6)) drop-shadow(0 0 20px rgba(255,193,7,0.3))",
                     scale: 1.02
                   }}
@@ -70,8 +70,8 @@ const Navbar = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Link 
-                      to={link.to} 
+                    <Link
+                      to={link.to}
                       className="group relative px-4 py-2 text-gray-300 hover:text-white font-medium transition-colors flex items-center gap-2"
                     >
                       <Icon className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
@@ -87,8 +87,8 @@ const Navbar = () => {
                   </motion.div>
                 );
               })}
-              
-              {user ? (
+
+              {currentUser ? (
                 <div className="flex items-center space-x-3 ml-4">
                   {/* Badge de usuario */}
                   <motion.div
@@ -99,30 +99,21 @@ const Navbar = () => {
                   >
                     <Sparkles className="w-3 h-3 text-yamaha-accent" />
                     <span className="text-xs font-medium text-yamaha-blue-100">
-                      Admin
+                      {currentUser.role === 'user' ? 'Comprador' : 'Administrador'}
                     </span>
                   </motion.div>
 
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Link 
-                      to="/admin" 
-                      className="group relative bg-gradient-accent text-black px-5 py-2.5 rounded-xl font-bold overflow-hidden shadow-lg"
+                  {currentUser.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className="bg-yamaha-blue text-white px-5 py-2.5 rounded-xl font-bold hover:bg-yamaha-dark transition"
                     >
                       <span className="relative z-10 flex items-center gap-2">
                         <Shield className="w-4 h-4" />
                         Panel
                       </span>
-                      <motion.div
-                        className="absolute inset-0 bg-yamaha-accent-light"
-                        initial={{ x: '-100%' }}
-                        whileHover={{ x: 0 }}
-                        transition={{ duration: 0.3 }}
-                      />
                     </Link>
-                  </motion.div>
+                  )}
 
                   <motion.button
                     onClick={handleLogout}
@@ -135,12 +126,12 @@ const Navbar = () => {
                   </motion.button>
                 </div>
               ) : (
-               <Link
-  to="/login"
-  className="bg-gradient-accent text-black px-6 py-2.5 rounded-xl font-bold shadow-lg hover:bg-yamaha-accent-light transition-colors"
->
-  Iniciar Sesión
-</Link>
+                <Link
+                  to="/login"
+                  className="bg-gradient-accent text-black px-6 py-2.5 rounded-xl font-bold shadow-lg hover:bg-yamaha-accent-light transition-colors"
+                >
+                  Iniciar Sesión
+                </Link>
               )}
             </div>
 
@@ -234,22 +225,24 @@ const Navbar = () => {
                     transition={{ delay: 0.4 }}
                   />
 
-                  {user ? (
+                  {currentUser ? (
                     <>
-                      <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.5 }}
-                      >
-                        <Link
-                          to="/admin"
-                          className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-accent text-black font-bold shadow-lg"
-                          onClick={() => setIsMenuOpen(false)}
+                      {currentUser.role === 'admin' && (
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.5 }}
                         >
-                          <Shield className="w-5 h-5" />
-                          <span>Panel Admin</span>
-                        </Link>
-                      </motion.div>
+                          <Link
+                            to="/admin"
+                            className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-accent text-black font-bold shadow-lg"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            <Shield className="w-5 h-5" />
+                            <span>Panel Admin</span>
+                          </Link>
+                        </motion.div>
+                      )}
 
                       <motion.button
                         onClick={handleLogout}

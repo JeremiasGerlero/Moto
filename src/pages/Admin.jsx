@@ -2,15 +2,25 @@ import { useState, useEffect } from 'react';
 import VehicleTable from '../components/Admin/VehicleTable';
 import VehicleForm from '../components/Admin/VehicleForm';
 import { Plus } from 'lucide-react';
+import {useNavigate} from 'react-router-dom';
+import {useAuth} from '../context/AuthContext';
 
-const API_URL = 'http://localhost:5000/api/products'; // ← tu backend MongoDB
+const API_URL = 'http://localhost:5000/api/products';
 
 const Admin = () => {
   const [vehicles, setVehicles] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [loading, setLoading] = useState(true);
+  const user = useAuth();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!user) {
+      navigate('/login', { replace: true });
+    }
+  }, [user, navigate]);
+  
   useEffect(() => {
     fetchVehicles();
   }, []);
@@ -27,56 +37,110 @@ const Admin = () => {
     }
   };
 
-  const handleAddVehicle = async (vehicleData, imageFile) => {
+  const handleAddVehicle = async (data) => {
     try {
-      const formData = new FormData();
-      formData.append('name', vehicleData.name);
-      formData.append('price', Number(vehicleData.precio));
-      formData.append('category', vehicleData.categoria);
-      formData.append('description', vehicleData.descripcion);
-      if (imageFile) formData.append('image', imageFile);
+      console.log('📦 Datos recibidos del formulario:', data);
+      
+      // Crear objeto con los campos que espera el backend
+      const productData = {
+        nombre: data.nombre || data.name || '',
+        categoria: data.categoria || data.category || 'moto',
+        precio: Number(data.precio || data.price || 0),
+        descripcion: data.descripcion || data.description || '',
+       imagen: data.imageUrl || data.imagen || '',
+        cilindrada: data.cilindrada || '',
+        velocidadMax: data.velocidadMax || '',
+        peso: data.peso || '',
+        disponible: true
+      };
 
-      await fetch(API_URL, {
+      console.log('📤 Enviando al backend:', productData);
+
+      const res = await fetch(API_URL, {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
       });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error('❌ Error del servidor:', errorData);
+        throw new Error(errorData.message || 'Error al guardar');
+      }
+
+      const newProduct = await res.json();
+      console.log('✅ Vehículo creado exitosamente:', newProduct);
 
       await fetchVehicles();
       setShowForm(false);
+      alert('✅ Vehículo agregado exitosamente');
     } catch (error) {
-      console.error('Error adding vehicle:', error);
+      console.error('❌ Error al agregar vehículo:', error);
+      alert('❌ Error: ' + error.message);
     }
   };
 
   const handleEditVehicle = async (vehicleData, imageFile) => {
     try {
-      const formData = new FormData();
-      formData.append('name', vehicleData.name);
-      formData.append('price', Number(vehicleData.precio));
-      formData.append('category', vehicleData.categoria);
-      formData.append('description', vehicleData.descripcion);
-      if (imageFile) formData.append('image', imageFile);
+      console.log('✏️ Editando vehículo:', vehicleData);
+      
+      const productData = {
+        nombre: vehicleData.nombre || vehicleData.name || editingVehicle.nombre,
+        precio: Number(vehicleData.precio || vehicleData.price || editingVehicle.precio),
+        categoria: vehicleData.categoria || vehicleData.category || editingVehicle.categoria,
+        descripcion: vehicleData.descripcion || vehicleData.description || editingVehicle.descripcion,
+        imagen: vehicleData.imageUrl || vehicleData.imagen || editingVehicle.imagen,
+        cilindrada: vehicleData.cilindrada || editingVehicle.cilindrada || '',
+        velocidadMax: vehicleData.velocidadMax || editingVehicle.velocidadMax || '',
+        peso: vehicleData.peso || editingVehicle.peso || '',
+        disponible: vehicleData.disponible !== undefined ? vehicleData.disponible : editingVehicle.disponible
+      };
 
-      await fetch(`${API_URL}/${editingVehicle._id}`, {
+      console.log('📤 Actualizando en backend:', productData);
+
+      const res = await fetch(`${API_URL}/${editingVehicle._id}`, {
         method: 'PUT',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
       });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'Error al actualizar vehículo');
+      }
+
+      const updatedProduct = await res.json();
+      console.log('✅ Vehículo actualizado:', updatedProduct);
 
       await fetchVehicles();
       setEditingVehicle(null);
       setShowForm(false);
+      alert('✅ Vehículo actualizado exitosamente');
     } catch (error) {
-      console.error('Error updating vehicle:', error);
+      console.error('❌ Error updating vehicle:', error);
+      alert('❌ Error al actualizar: ' + error.message);
     }
   };
 
   const handleDeleteVehicle = async (vehicleId) => {
+    if (!vehicleId || vehicleId === 'undefined' || vehicleId.length !== 24) {
+      alert('ID de vehículo no válido');
+      return;
+    }
     if (!window.confirm('¿Estás seguro de que quieres eliminar este vehículo?')) return;
+
     try {
-      await fetch(`${API_URL}/${vehicleId}`, { method: 'DELETE' });
+      const res = await fetch(`${API_URL}/${vehicleId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Error al eliminar');
       await fetchVehicles();
+      alert('✅ Vehículo eliminado');
     } catch (error) {
-      console.error('Error deleting vehicle:', error);
+      console.error(error);
+      alert('❌ Error al eliminar: ' + error.message);
     }
   };
 
@@ -87,6 +151,7 @@ const Admin = () => {
           <h1 className="text-3xl font-bold text-gray-900">Panel de Administración</h1>
           <button
             onClick={() => {
+              console.log('🔘 Botón Agregar Vehículo clickeado');
               setEditingVehicle(null);
               setShowForm(true);
             }}

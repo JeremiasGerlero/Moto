@@ -9,6 +9,9 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -23,14 +26,8 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
-                    <Admin />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/register" element={<Register />} />
+              <Route path="/admin" element={<ProtectedRoute> <Admin /> </ProtectedRoute>}/>
             </Routes>
           </main>
           <Footer />

@@ -26,13 +26,33 @@ const Home = () => {
 
   const fetchProducts = async () => {
     try {
+      console.log('🔄 Intentando obtener productos de:', API_URL);
       const res = await fetch(API_URL);
+      
+      console.log('📡 Respuesta recibida, status:', res.status);
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      
       const data = await res.json();
-      setProducts(data);
+      console.log('📦 Productos recibidos:', data);
+      console.log('📊 Tipo de datos:', Array.isArray(data) ? 'Array' : typeof data);
+      console.log('📏 Cantidad de productos:', data.length);
+      
+      if (Array.isArray(data)) {
+        setProducts(data);
+        console.log('✅ Productos seteados correctamente');
+      } else {
+        console.error('❌ Los datos NO son un array:', data);
+        setProducts([]);
+      }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('❌ Error fetching products:', error);
+      setProducts([]);
     } finally {
       setLoading(false);
+      console.log('🏁 Loading finalizado');
     }
   };
 
@@ -163,13 +183,7 @@ const Home = () => {
                 />
               </motion.button>
               
-              <motion.button 
-                className="group bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 hover:border-white/50 transition-all duration-300 shadow-xl"
-                whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(255,255,255,0.3)" }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Agendar Test Drive
-              </motion.button>
+              
             </motion.div>
           </motion.div>
         </div>
@@ -179,39 +193,36 @@ const Home = () => {
       <div className="bg-gradient-to-r from-yamaha-dark-800 via-yamaha-dark-900 to-yamaha-dark-800 border-y border-yamaha-blue-900/30">
         <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-            [
+            {[
               { icon: Award, number: '50+', label: 'Modelos Disponibles', color: 'text-yamaha-accent' },
               { icon: Users, number: '1000+', label: 'Clientes Satisfechos', color: 'text-yamaha-blue-400' },
               { icon: Clock, number: '15', label: 'Años de Experiencia', color: 'text-yamaha-accent' },
               { icon: Headphones, number: '24/7', label: 'Soporte Técnico', color: 'text-yamaha-blue-400' }
-            ].map((stat, index) => {
-              const Icon = stat.icon;
-              return (
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                className="text-center group"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                whileHover={{ y: -5 }}
+              >
                 <motion.div
-                  key={index}
-                  className="text-center group"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -5 }}
+                  className={`inline-block p-3 rounded-xl bg-yamaha-dark-700/50 backdrop-blur-sm mb-3 ${stat.color}`}
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
                 >
-                  <motion.div
-                    className={`inline-block p-3 rounded-xl bg-yamaha-dark-700/50 backdrop-blur-sm mb-3 ${stat.color}`}
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    <Icon className="w-6 h-6" />
-                  </motion.div>
-                  <div className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 group-hover:text-yamaha-accent transition-colors">
-                    {stat.number}
-                  </div>
-                  <div className="text-xs sm:text-sm text-gray-400 font-medium">
-                    {stat.label}
-                  </div>
+                  <stat.icon className="w-6 h-6" />
                 </motion.div>
-              );
-            })}
+                <div className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 group-hover:text-yamaha-accent transition-colors">
+                  {stat.number}
+                </div>
+                <div className="text-xs sm:text-sm text-gray-400 font-medium">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
@@ -284,7 +295,7 @@ const Home = () => {
           >
             {filteredProducts.map((product, index) => (
               <motion.div
-                key={product._id} /* ← cambiado a _id para MongoDB */
+                key={product._id}
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ 
@@ -323,84 +334,8 @@ const Home = () => {
         )}
       </div>
 
-      {/* CTA Section Premium */}
-      <div className="relative bg-gradient-yamaha-dark py-20 sm:py-24 md:py-32 mt-20 overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,193,7,0.15) 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }}></div>
-        </div>
-
-        <motion.div
-          className="absolute top-0 right-0 w-96 h-96 bg-yamaha-accent/20 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 50, 0],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-
-        <div className="relative max-w-7xl mx-auto px-4 text-center z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.div
-              className="inline-block mb-6"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-            >
-              <Award className="w-16 h-16 text-yamaha-accent mx-auto" />
-            </motion.div>
-
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">
-              ¿Listo para tu{' '}
-              <span className="bg-clip-text text-transparent bg-gradient-accent">
-                Próxima Aventura
-              </span>
-              ?
-            </h2>
-            
-            <p className="text-gray-300 text-base sm:text-lg md:text-xl mb-10 max-w-3xl mx-auto px-4 leading-relaxed">
-              Visita nuestro showroom exclusivo y experimenta la{' '}
-              <span className="text-yamaha-accent font-semibold">excelencia Yamaha</span>.
-              Nuestro equipo de expertos está listo para asesorarte.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
-              <motion.button 
-                className="group relative bg-gradient-accent text-black px-10 py-5 rounded-xl font-bold text-lg overflow-hidden shadow-2xl"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span className="relative z-10">Agendar Test Drive</span>
-                <motion.div
-                  className="absolute inset-0 bg-yamaha-accent-light"
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.button>
-              
-              <motion.button 
-                className="bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-white/20 hover:border-yamaha-accent transition-all duration-300 shadow-xl"
-                whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(255,193,7,0.4)" }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Ver Financiamiento
-              </motion.button>
-            </div>
-          </motion.div>
-        </div>
-      </div>
+      
+      
     </div>
   );
 };

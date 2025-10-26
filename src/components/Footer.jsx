@@ -115,7 +115,7 @@ const Footer = () => {
               transition={{ duration: 0.5 }}
             >
               <img 
-                src="/public/logoYamahaBlanco2.png" 
+                src="/logoYamahaBlanco2.png" 
                 alt="Yamaha" 
                 className="h-20 mb-6 drop-shadow-[0_0_10px_rgba(255,193,7,0.3)]"
               />

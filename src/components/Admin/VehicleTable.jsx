@@ -25,7 +25,8 @@ const VehicleTable = ({ vehicles, onEdit, onDelete }) => {
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {vehicles.map((vehicle) => (
-            <tr key={vehicle.id}>
+            <tr key={vehicle._id}>
+              
               <td className="px-6 py-4 whitespace-nowrap">
                 <img
                   src={vehicle.imageUrl || 'https://via.placeholder.com/50x50?text=Yamaha'}
@@ -52,7 +53,7 @@ const VehicleTable = ({ vehicles, onEdit, onDelete }) => {
                   <Edit className="h-4 w-4" />
                 </button>
                 <button
-                  onClick={() => onDelete(vehicle.id)}
+                  onClick={() => onDelete(vehicle._id)}
                   className="text-red-600 hover:text-red-900"
                 >
                   <Trash2 className="h-4 w-4" />
