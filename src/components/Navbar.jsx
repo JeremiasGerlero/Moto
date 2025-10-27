@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Menu, X, LogOut, Home, Car, Info, Mail, Shield, Sparkles } from 'lucide-react';
 import { useState } from 'react';
@@ -8,6 +8,7 @@ const Navbar = () => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -18,6 +19,15 @@ const Navbar = () => {
       console.error('Error al cerrar sesión:', error);
     }
   };
+
+  const handleNavClick = (e, to) => {
+  // Si ya estamos en la misma ruta, recargar la página
+  if (location.pathname === to) {
+    e.preventDefault();
+    window.location.reload();
+  }
+};
+
 
   const navLinks = [
     { to: '/', label: 'Inicio', icon: Home },
@@ -61,32 +71,23 @@ const Navbar = () => {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-2">
-              {navLinks.map((link, index) => {
-                const Icon = link.icon;
-                return (
-                  <motion.div
-                    key={link.to}
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <Link
-                      to={link.to}
-                      className="group relative px-4 py-2 text-gray-300 hover:text-white font-medium transition-colors flex items-center gap-2"
-                    >
-                      <Icon className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
-                      <span>{link.label}</span>
-                      {/* Underline effect */}
-                      <motion.div
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-accent"
-                        initial={{ scaleX: 0 }}
-                        whileHover={{ scaleX: 1 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    </Link>
-                  </motion.div>
-                );
-              })}
+             {navLinks.map((link) => {
+               const Icon = link.icon;
+               return (
+                <Link
+                 key={link.to}
+                 to={link.to}
+                 onClick={(e) => handleNavClick(e, link.to)}
+                 className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition ${
+                 location.pathname === link.to
+                 ? 'bg-yamaha-blue text-white'
+                 : 'text-gray-700 hover:bg-gray-100'
+              }`} >
+                <Icon className="h-5 w-5" />
+                <span>{link.label}</span>
+              </Link>
+           );
+        })}
 
               {currentUser ? (
                 <div className="flex items-center space-x-3 ml-4">

@@ -26,19 +26,19 @@ const Contact = () => {
     {
       icon: MapPin,
       title: 'Dirección',
-      content: 'Av. Principal 123, Ciudad, País',
+      content: 'Los Nogales 130, San Antonio de Arredondo, Córdoba, Argentina',
       color: 'text-yamaha-accent'
     },
     {
       icon: Phone,
       title: 'Teléfono',
-      content: '+1 (555) 123-4567',
+      content: '+54 (3541) 567273',
       color: 'text-yamaha-blue-400'
     },
     {
       icon: Mail,
       title: 'Email',
-      content: 'info@yamaha.com',
+      content: 'jeremiasgerlero7gmail.com',
       color: 'text-yamaha-accent'
     },
     {
@@ -305,40 +305,34 @@ const Contact = () => {
               transition={{ delay: 0.4 }}
               className="relative overflow-hidden rounded-2xl border border-yamaha-blue-900/30 shadow-2xl"
             >
-              <div className="bg-gradient-to-br from-yamaha-dark-800 to-yamaha-dark-900 h-64 flex items-center justify-center relative">
-                {/* Grid overlay */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute inset-0" style={{
-                    backgroundImage: `linear-gradient(rgba(13, 71, 161, 0.3) 1px, transparent 1px),
-                                    linear-gradient(90deg, rgba(13, 71, 161, 0.3) 1px, transparent 1px)`,
-                    backgroundSize: '30px 30px'
-                  }}></div>
-                </div>
-                
-                <motion.div
-                  className="relative z-10 text-center"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                >
-                  <MapPin className="w-16 h-16 text-yamaha-accent mx-auto mb-3" />
-                  <span className="text-gray-400 font-medium">Mapa de ubicación</span>
-                </motion.div>
+              <div className="relative h-64 sm:h-80 md:h-96">
+                 {/* Google Maps Embed */}
+                  <iframe
+                    title="Ubicación Yamaha"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3402.440527700825!2d-64.53462379999999!3d-31.484572999999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x942d6803b2d95f15%3A0xd2474ecf8b45f3b4!2sLos%20Nogales%20130%2C%20X5153%20C%C3%B3rdoba!5e0!3m2!1ses-419!2sar!4v1761568288002!5m2!1ses-419!2sar"
+                   height="100%"
+                   whidth="100%"
+                   style={{ border: 0 }}
+                   allowFullScreen=""
+                   loading="lazy"
+                   referrerPolicy="no-referrer-when-downgrade"
+                   className=" w.full h-full"> 
+                 </iframe>
 
-                {/* Glow effect */}
-                <motion.div
-                  className="absolute inset-0 bg-yamaha-accent/5 rounded-full blur-3xl"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.1, 0.2, 0.1],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-              </div>
-            </motion.div>
+                {/* Overlay con info (opcional) */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-yamaha-dark-900/95 to-transparent p-4 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 text-white">
+                   <div className="p-2 bg-yamaha-accent/20 rounded-lg">
+                    <MapPin className="w-5 h-5 text-yamaha-accent" />
+                  </div>
+                  <div>
+                    <p className="font-bold">Concesionario Yamaha</p>
+                    <p className="text-sm text-gray-300">San Antonio de Arredondo, Córdoba</p>
+                </div>
+             </div>
+           </div>
+          </div>
+        </motion.div>
           </motion.div>
         </div>
       </div>

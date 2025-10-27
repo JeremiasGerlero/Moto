@@ -99,18 +99,7 @@ const Login = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Badge Superior */}
-            <motion.div
-              className="inline-flex items-center gap-2 bg-yamaha-blue-500/20 backdrop-blur-sm border border-yamaha-blue-400/30 rounded-full px-4 py-2 mb-6"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-            >
-              <Shield className="w-4 h-4 text-yamaha-accent" />
-              <span className="text-sm font-medium text-yamaha-blue-100">
-                Acceso Administrativo
-              </span>
-            </motion.div>
+            
 
             {/* Icon Shield Animated */}
             <motion.div

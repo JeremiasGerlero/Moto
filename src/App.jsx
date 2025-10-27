@@ -12,6 +12,8 @@ import Login from './pages/Login';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Register from './pages/Register';
+import Users from './pages/Users';
+import Quote from './pages/Quote';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/cotizar/:id" element={<Quote />} />
+              <Route path="/users" element={<ProtectedRoute> <Users/> </ProtectedRoute>} />
               <Route path="/admin" element={<ProtectedRoute> <Admin /> </ProtectedRoute>}/>
             </Routes>
           </main>

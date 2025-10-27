@@ -26,12 +26,14 @@ const VehicleTable = ({ vehicles, onEdit, onDelete }) => {
         <tbody className="bg-white divide-y divide-gray-200">
           {vehicles.map((vehicle) => (
             <tr key={vehicle._id}>
-              
               <td className="px-6 py-4 whitespace-nowrap">
                 <img
-                  src={vehicle.imageUrl || 'https://via.placeholder.com/50x50?text=Yamaha'}
+                  src={vehicle.imagen || 'https://via.placeholder.com/50x50?text=Yamaha'}
                   alt={vehicle.nombre}
                   className="h-12 w-12 object-cover rounded"
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/50x50?text=Yamaha';
+                  }}
                 />
               </td>
               <td className="px-6 py-4 whitespace-nowrap">

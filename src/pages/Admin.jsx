@@ -1,26 +1,18 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import VehicleTable from '../components/Admin/VehicleTable';
 import VehicleForm from '../components/Admin/VehicleForm';
-import { Plus } from 'lucide-react';
-import {useNavigate} from 'react-router-dom';
-import {useAuth} from '../context/AuthContext';
+import { Plus, Users } from 'lucide-react';
 
 const API_URL = 'http://localhost:5000/api/products';
 
 const Admin = () => {
+  const navigate = useNavigate();
   const [vehicles, setVehicles] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [loading, setLoading] = useState(true);
-  const user = useAuth();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/login', { replace: true });
-    }
-  }, [user, navigate]);
-  
   useEffect(() => {
     fetchVehicles();
   }, []);
@@ -41,13 +33,12 @@ const Admin = () => {
     try {
       console.log('📦 Datos recibidos del formulario:', data);
       
-      // Crear objeto con los campos que espera el backend
       const productData = {
         nombre: data.nombre || data.name || '',
         categoria: data.categoria || data.category || 'moto',
         precio: Number(data.precio || data.price || 0),
         descripcion: data.descripcion || data.description || '',
-       imagen: data.imageUrl || data.imagen || '',
+        imagen: data.imageUrl || data.imagen || '',
         cilindrada: data.cilindrada || '',
         velocidadMax: data.velocidadMax || '',
         peso: data.peso || '',
@@ -82,7 +73,7 @@ const Admin = () => {
     }
   };
 
-  const handleEditVehicle = async (vehicleData, imageFile) => {
+  const handleEditVehicle = async (vehicleData) => {
     try {
       console.log('✏️ Editando vehículo:', vehicleData);
       
@@ -127,19 +118,26 @@ const Admin = () => {
   };
 
   const handleDeleteVehicle = async (vehicleId) => {
-    if (!vehicleId || vehicleId === 'undefined' || vehicleId.length !== 24) {
-      alert('ID de vehículo no válido');
-      return;
-    }
     if (!window.confirm('¿Estás seguro de que quieres eliminar este vehículo?')) return;
-
+    
     try {
-      const res = await fetch(`${API_URL}/${vehicleId}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Error al eliminar');
+      console.log('🗑️ Eliminando vehículo:', vehicleId);
+      
+      const res = await fetch(`${API_URL}/${vehicleId}`, { 
+        method: 'DELETE' 
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'Error al eliminar vehículo');
+      }
+
+      console.log('✅ Vehículo eliminado');
+      
       await fetchVehicles();
-      alert('✅ Vehículo eliminado');
+      alert('✅ Vehículo eliminado exitosamente');
     } catch (error) {
-      console.error(error);
+      console.error('❌ Error deleting vehicle:', error);
       alert('❌ Error al eliminar: ' + error.message);
     }
   };
@@ -149,17 +147,26 @@ const Admin = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Panel de Administración</h1>
-          <button
-            onClick={() => {
-              console.log('🔘 Botón Agregar Vehículo clickeado');
-              setEditingVehicle(null);
-              setShowForm(true);
-            }}
-            className="flex items-center space-x-2 bg-yamaha-blue text-white px-4 py-2 rounded-lg hover:bg-yamaha-dark transition"
-          >
-            <Plus className="h-5 w-5" />
-            <span>Agregar Vehículo</span>
-          </button>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => navigate('/users')}
+              className="flex items-center space-x-2 bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+            >
+              <Users className="h-5 w-5" />
+              <span>Administrar Usuarios</span>
+            </button>
+            <button
+              onClick={() => {
+                console.log('🔘 Botón Agregar Vehículo clickeado');
+                setEditingVehicle(null);
+                setShowForm(true);
+              }}
+              className="flex items-center space-x-2 bg-yamaha-blue text-white px-4 py-2 rounded-lg hover:bg-yamaha-dark transition"
+            >
+              <Plus className="h-5 w-5" />
+              <span>Agregar Vehículo</span>
+            </button>
+          </div>
         </div>
 
         {loading ? (
